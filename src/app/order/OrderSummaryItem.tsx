@@ -9,6 +9,8 @@ export interface OrderSummaryItemProps {
     amount: number;
     quantity: number;
     name: string;
+    brand: string;
+    categoryNames?: OrderSummaryItemOption[];
     amountAfterDiscount?: number;
     image?: ReactNode;
     description?: ReactNode;
@@ -25,10 +27,21 @@ const OrderSummaryItem: FunctionComponent<OrderSummaryItemProps> = ({
     amountAfterDiscount,
     image,
     name,
+    brand,
+    categoryNames,
     productOptions,
     quantity,
     description,
-}) => (
+}) => { let redLine = ''; let redLineIndex = 0;
+
+   (categoryNames || []).map((option, index) => {
+        if (option.content === 'Sale') {
+            redLine = 'true';
+        }
+        redLineIndex = index;
+        });
+
+   return (
     <div className="product" data-test="cart-item">
         <figure className="product-column product-figure">
             { image }
@@ -39,7 +52,11 @@ const OrderSummaryItem: FunctionComponent<OrderSummaryItemProps> = ({
                 className="product-title optimizedCheckout-contentPrimary"
                 data-test="cart-item-product-title"
             >
-                { `${quantity} x ${name}` }
+                <span className="brand-name">{ `${brand}` }</span>
+                <br />
+                { `${name}` }
+                <br />
+                { `Qty ${quantity}` }
             </h5>
             <ul
                 className="product-options optimizedCheckout-contentSecondary"
@@ -66,6 +83,8 @@ const OrderSummaryItem: FunctionComponent<OrderSummaryItemProps> = ({
         <div className="product-column product-actions">
             <div
                 className={ classNames(
+                    { 'on-sale-tag': redLine === 'true' },
+                    { 'on-sale-index': redLineIndex === 0 },
                     'product-price',
                     'optimizedCheckout-contentPrimary',
                     { 'product-price--beforeDiscount': isNumber(amountAfterDiscount) && amountAfterDiscount !== amount }
@@ -73,6 +92,12 @@ const OrderSummaryItem: FunctionComponent<OrderSummaryItemProps> = ({
                 data-test="cart-item-product-price"
             >
                 <ShopperCurrency amount={ amount } />
+                { (categoryNames || []).map((option, index) =>
+                    option.content === 'Sale' &&
+                    <div className="red-price">
+                        <p className="on-sale-tag" key={ index }>On Sale</p>
+                    </div>
+                ) }
             </div>
 
             { isNumber(amountAfterDiscount) && amountAfterDiscount !== amount && <div
@@ -80,9 +105,13 @@ const OrderSummaryItem: FunctionComponent<OrderSummaryItemProps> = ({
                 data-test="cart-item-product-price--afterDiscount"
             >
                 <ShopperCurrency amount={ amountAfterDiscount } />
+                { (categoryNames || []).map((option, index) =>
+                    option.content === 'Sale' &&
+                    <p className="on-sale-tag" key={ index }>On Sale</p>
+                ) }
             </div> }
         </div>
     </div>
-);
+)};
 
 export default memo(OrderSummaryItem);

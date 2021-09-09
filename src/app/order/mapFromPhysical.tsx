@@ -10,6 +10,11 @@ function mapFromPhysical(item: PhysicalItem): OrderSummaryItemProps {
         amount: item.extendedComparisonPrice,
         amountAfterDiscount: item.extendedSalePrice,
         name: item.name,
+        brand: item.brand,
+        categoryNames: (item.categoryNames || []).map(option => ({
+            content: `${option}`,
+            testId: '',
+        })),
         image: getOrderSummaryItemImage(item),
         description: item.giftWrapping ? item.giftWrapping.name : undefined,
         productOptions: (item.options || []).map(option => ({

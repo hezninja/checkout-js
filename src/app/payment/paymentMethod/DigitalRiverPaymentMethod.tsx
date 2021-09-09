@@ -22,7 +22,7 @@ const DigitalRiverPaymentMethod: FunctionComponent<DigitalRiverPaymentMethodProp
 }) => {
     const { setSubmitted } = useContext(FormContext);
     const containerId = `${rest.method.id}-component-field`;
-    const isVaultingEnabled = rest.method.config.isVaultingEnabled;
+    const disabledPaymentMethods = rest.method.initializationData?.disabledPaymentMethods ?? [];
 
     const initializeDigitalRiverPayment = useCallback(options => initializePayment({
         ...options,
@@ -30,14 +30,15 @@ const DigitalRiverPaymentMethod: FunctionComponent<DigitalRiverPaymentMethodProp
             containerId,
             configuration: {
                 flow: 'checkout',
-                showSavePaymentAgreement: isVaultingEnabled,
-                showComplianceSection: false,
+                showSavePaymentAgreement: false,
+                showComplianceSection: true,
                 button: {
                     type: 'submitOrder',
                 },
                 usage: 'unscheduled',
                 showTermsOfSaleDisclosure: true,
                 paymentMethodConfiguration: {
+                    disabledPaymentMethods,
                     classes: DigitalRiverClasses,
                 },
             },
@@ -49,7 +50,7 @@ const DigitalRiverPaymentMethod: FunctionComponent<DigitalRiverPaymentMethodProp
                 onUnhandledError?.(error);
             },
         },
-    }), [initializePayment, containerId, isVaultingEnabled, setSubmitted, submitForm, onUnhandledError]);
+    }), [initializePayment, containerId, disabledPaymentMethods, setSubmitted, submitForm, onUnhandledError]);
 
     return <HostedDropInPaymentMethod
         { ...rest }

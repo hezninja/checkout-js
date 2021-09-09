@@ -120,11 +120,9 @@ describe('CheckoutStep', () => {
             heading: 'Billing',
             summary: 'Billing summary',
             type: CheckoutStepType.Billing,
-            isActive: true,
             isComplete: true,
             isEditable: true,
-            onEdit: undefined,
-            suggestion: undefined,
+            isActive: true,
         };
 
         const component = mount(
@@ -138,7 +136,7 @@ describe('CheckoutStep', () => {
             .toHaveLength(1);
 
         expect(component.find(CheckoutStepHeader).props())
-            .toEqual({ ...headerProps, isClosed: false });
+            .toEqual(headerProps);
     });
 
     it('renders content if step is active', () => {

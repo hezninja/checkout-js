@@ -8,6 +8,8 @@ function mapFromCustom(item: CustomItem): OrderSummaryItemProps {
         quantity: item.quantity,
         amount: item.extendedListPrice,
         name: item.name,
+        brand: 'Just Sunnies',
+        categoryNames: [],
     };
 }
 

@@ -2,7 +2,7 @@ import { withFormik, FieldProps, FormikProps } from 'formik';
 import React, { memo, useCallback, FunctionComponent, ReactNode } from 'react';
 import { object, string } from 'yup';
 
-import { withLanguage, TranslatedHtml, TranslatedString, WithLanguageProps } from '../locale';
+import { withLanguage, TranslatedString, WithLanguageProps } from '../locale';
 import { getPrivacyPolicyValidationSchema, PrivacyPolicyField } from '../privacyPolicy';
 import { Button, ButtonVariant } from '../ui/button';
 import { BasicFormField, Fieldset, Form, Legend  } from '../ui/form';
@@ -13,7 +13,6 @@ import SubscribeField from './SubscribeField';
 export interface GuestFormProps {
     canSubscribe: boolean;
     checkoutButtons?: ReactNode;
-    continueAsGuestButtonLabelId: string;
     requiresMarketingConsent: boolean;
     defaultShouldSubscribe: boolean;
     email?: string;
@@ -32,7 +31,6 @@ export interface GuestFormValues {
 const GuestForm: FunctionComponent<GuestFormProps & WithLanguageProps & FormikProps<GuestFormValues>> = ({
     canSubscribe,
     checkoutButtons,
-    continueAsGuestButtonLabelId,
     isLoading,
     onChangeEmail,
     onShowLogin,
@@ -61,13 +59,25 @@ const GuestForm: FunctionComponent<GuestFormProps & WithLanguageProps & FormikPr
                     </Legend>
                 }
             >
-                <p>
-                    <TranslatedHtml id="customer.checkout_as_guest_text" />
-                </p>
 
                 <div className="customerEmail-container">
                     <div className="customerEmail-body">
-                        <EmailField onChange={ onChangeEmail } />
+                        <div className="guest-email-box">
+                            <EmailField onChange={ onChangeEmail } />
+                        </div>
+
+                        <p className="signInString">
+                            <TranslatedString id="customer.login_text" />
+                            { ' ' }
+                            <a
+                                data-test="customer-continue-button"
+                                id="checkout-customer-login"
+                                onClick={ onShowLogin }
+                            >
+                                <TranslatedString id="customer.login_action" />
+                            </a>
+                            <span> for faster checkout, or enter email to continue as guest</span>
+                        </p>
 
                         { (canSubscribe || requiresMarketingConsent) && <BasicFormField
                             name="shouldSubscribe"
@@ -78,34 +88,20 @@ const GuestForm: FunctionComponent<GuestFormProps & WithLanguageProps & FormikPr
                             url={ privacyPolicyUrl }
                         /> }
                     </div>
-
-                    <div className="form-actions customerEmail-action">
-                        <Button
-                            className="customerEmail-button"
-                            id="checkout-customer-continue"
-                            isLoading={ isLoading }
-                            testId="customer-continue-as-guest-button"
-                            type="submit"
-                            variant={ ButtonVariant.Primary }
-                        >
-                            <TranslatedString id={ continueAsGuestButtonLabelId } />
-                        </Button>
-                    </div>
                 </div>
 
-                {
-                    !isLoading && <p>
-                        <TranslatedString id="customer.login_text" />
-                        { ' ' }
-                        <a
-                            data-test="customer-continue-button"
-                            id="checkout-customer-login"
-                            onClick={ onShowLogin }
-                        >
-                            <TranslatedString id="customer.login_action" />
-                        </a>
-                    </p>
-                }
+                <div className="form-actions customerEmail-action">
+                    <Button
+                        className="customerEmail-button"
+                        id="checkout-customer-continue"
+                        isLoading={ isLoading }
+                        testId="customer-continue-as-guest-button"
+                        type="submit"
+                        variant={ ButtonVariant.Primary }
+                    >
+                        <TranslatedString id="customer.continue_as_guest_action" />
+                    </Button>
+                </div>
 
                 { checkoutButtons }
             </Fieldset>

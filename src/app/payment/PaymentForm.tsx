@@ -129,6 +129,8 @@ const PaymentForm: FunctionComponent<PaymentFormProps & FormikProps<PaymentFormV
                 usableStoreCredit={ usableStoreCredit }
             /> }
 
+            <PaymentRedeemables />
+
             <PaymentMethodListFieldset
                 isEmbedded={ isEmbedded }
                 isInitializingPayment={ isInitializingPayment }
@@ -140,8 +142,6 @@ const PaymentForm: FunctionComponent<PaymentFormProps & FormikProps<PaymentFormV
                 resetForm={ resetForm }
                 values={ values }
             />
-
-            <PaymentRedeemables />
 
             { isTermsConditionsRequired && <TermsConditions
                 termsConditionsText={ termsConditionsText }

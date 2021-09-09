@@ -1,9 +1,8 @@
 import { PaymentMethod } from '@bigcommerce/checkout-sdk';
-import { find, get, noop } from 'lodash';
+import { find, noop } from 'lodash';
 import React, { memo, useCallback, useMemo, FunctionComponent } from 'react';
 
 import { connectFormik, ConnectFormikProps } from '../../common/form';
-import { isMobile } from '../../common/utility';
 import { Checklist, ChecklistItem } from '../../ui/form';
 
 import getUniquePaymentMethodId, { parseUniquePaymentMethodId } from './getUniquePaymentMethodId';
@@ -57,11 +56,6 @@ const PaymentMethodList: FunctionComponent<
     >
         { methods.map(method => {
             const value = getUniquePaymentMethodId(method.id, method.gateway);
-            const showOnlyOnMobileDevices = get(method, 'initializationData.showOnlyOnMobileDevices', false);
-
-            if (showOnlyOnMobileDevices && !isMobile()) {
-                return;
-            }
 
             return (
                 <PaymentMethodListItem

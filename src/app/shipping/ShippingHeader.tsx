@@ -17,7 +17,7 @@ const ShippingHeader: FunctionComponent<ShippingHeaderProps> = ({
     onMultiShippingChange,
     shouldShowMultiShipping,
 }) => (
-    <div className="form-legend-container">
+    <div className="form-legend-container shipping-first-header">
         <Legend testId="shipping-address-heading">
             <TranslatedString
                 id={ isMultiShippingMode ?

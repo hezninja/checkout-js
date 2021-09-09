@@ -17,7 +17,6 @@ import PasswordField from './PasswordField';
 
 export interface LoginFormProps {
     canCancel?: boolean;
-    continueAsGuestButtonLabelId: string;
     email?: string;
     forgotPasswordUrl: string;
     isSignInEmailEnabled?: boolean;
@@ -43,7 +42,6 @@ export interface LoginFormValues {
 
 const LoginForm: FunctionComponent<LoginFormProps & WithLanguageProps & FormikProps<LoginFormValues>> = ({
     canCancel,
-    continueAsGuestButtonLabelId,
     forgotPasswordUrl,
     email,
     isSignInEmailEnabled,
@@ -156,7 +154,7 @@ const LoginForm: FunctionComponent<LoginFormProps & WithLanguageProps & FormikPr
                         id="checkout-guest-continue"
                         onClick={ preventDefault(onContinueAsGuest) }
                     >
-                        <TranslatedString id={ continueAsGuestButtonLabelId } />
+                        Continue As Guest
                     </a> }
 
                     { canCancel &&

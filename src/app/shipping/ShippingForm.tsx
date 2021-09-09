@@ -15,7 +15,6 @@ export interface ShippingFormProps {
     countriesWithAutocomplete: string[];
     customerMessage: string;
     googleMapsApiKey?: string;
-    isBillingSameAsShipping: boolean;
     isGuest: boolean;
     isLoading: boolean;
     isShippingStepPending: boolean;
@@ -59,7 +58,6 @@ class ShippingForm extends Component<ShippingFormProps & WithLanguageProps> {
             getFields,
             googleMapsApiKey,
             initialize,
-            isBillingSameAsShipping,
             isGuest,
             isLoading,
             isMultiShippingMode,
@@ -114,7 +112,6 @@ class ShippingForm extends Component<ShippingFormProps & WithLanguageProps> {
                 getFields={ getFields }
                 googleMapsApiKey={ googleMapsApiKey }
                 initialize={ initialize }
-                isBillingSameAsShipping={ isBillingSameAsShipping }
                 isLoading={ isLoading }
                 isMultiShippingMode={ isMultiShippingMode }
                 isShippingStepPending={ isShippingStepPending }

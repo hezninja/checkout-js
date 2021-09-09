@@ -7,7 +7,7 @@ import { StaticBillingAddress } from '../billing';
 import { EmptyCartMessage } from '../cart';
 import { isCustomError, CustomError, ErrorLogger, ErrorModal } from '../common/error';
 import { retry } from '../common/utility';
-import { CheckoutSuggestion, CustomerInfo, CustomerSignOutEvent, CustomerViewType } from '../customer';
+import { CustomerInfo, CustomerSignOutEvent, CustomerViewType } from '../customer';
 import { isEmbedded, EmbeddedCheckoutStylesheet } from '../embeddedCheckout';
 import { withLanguage, TranslatedString, WithLanguageProps } from '../locale';
 import { PromotionBannerList } from '../promotion';
@@ -66,7 +66,6 @@ export interface CheckoutProps {
 
 export interface CheckoutState {
     activeStepType?: CheckoutStepType;
-    isBillingSameAsShipping: boolean;
     customerViewType?: CustomerViewType;
     defaultStepType?: CheckoutStepType;
     error?: Error;
@@ -101,7 +100,6 @@ class Checkout extends Component<CheckoutProps & WithCheckoutProps & WithLanguag
     stepTracker: StepTracker | undefined;
 
     state: CheckoutState = {
-        isBillingSameAsShipping: true,
         isCartEmpty: false,
         isRedirecting: false,
         isMultiShippingMode: false,
@@ -288,7 +286,6 @@ class Checkout extends Component<CheckoutProps & WithCheckoutProps & WithLanguag
                 key={ step.type }
                 onEdit={ this.handleEditStep }
                 onExpanded={ this.handleExpanded }
-                suggestion={ <CheckoutSuggestion /> }
                 summary={
                     <CustomerInfo
                         onSignOut={ this.handleSignOut }
@@ -322,10 +319,7 @@ class Checkout extends Component<CheckoutProps & WithCheckoutProps & WithLanguag
             consignments = [],
         } = this.props;
 
-        const {
-            isBillingSameAsShipping,
-            isMultiShippingMode,
-        } = this.state;
+        const { isMultiShippingMode } = this.state;
 
         if (!cart) {
             return;
@@ -350,7 +344,6 @@ class Checkout extends Component<CheckoutProps & WithCheckoutProps & WithLanguag
                 <LazyContainer>
                     <Shipping
                         cartHasChanged={ hasCartChanged }
-                        isBillingSameAsShipping={ isBillingSameAsShipping }
                         isMultiShippingMode={ isMultiShippingMode }
                         navigateNextStep={ this.handleShippingNextStep }
                         onCreateAccount={ this.handleShippingCreateAccount }
@@ -591,10 +584,8 @@ class Checkout extends Component<CheckoutProps & WithCheckoutProps & WithLanguag
         this.navigateToStep(CheckoutStepType.Customer);
     };
 
-    private handleShippingNextStep: (isBillingSameAsShipping: boolean) => void = isBillingSameAsShipping => {
-        this.setState({ isBillingSameAsShipping });
-
-        if (isBillingSameAsShipping) {
+    private handleShippingNextStep: (billingSameAsShipping: boolean) => void = billingSameAsShipping => {
+        if (billingSameAsShipping) {
             this.navigateToNextIncompleteStep();
         } else {
             this.navigateToStep(CheckoutStepType.Billing);
@@ -618,7 +609,7 @@ class Checkout extends Component<CheckoutProps & WithCheckoutProps & WithLanguag
         if (customerViewType === CustomerViewType.CreateAccount &&
             (!canCreateAccountInCheckout || isEmbedded())
         ) {
-            window.top.location.replace(createAccountUrl);
+            window.top.location.assign(createAccountUrl);
 
             return;
         }

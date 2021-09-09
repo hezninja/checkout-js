@@ -39,6 +39,24 @@ export type RedeemableProps = {
     clearError(error: Error): void;
 } & AppliedRedeemablesProps;
 
+const togglePromo = () => {
+    document.querySelectorAll(`.redeemable-label`).forEach(elem => {
+        elem.classList.remove('active');
+    });
+    document.querySelectorAll(`.redeemable-label.promo`).forEach(elem => {
+        elem.classList.add('active');
+    });
+};
+
+const toggleGiftcard = () => {
+    document.querySelectorAll(`.redeemable-label`).forEach(elem => {
+        elem.classList.remove('active');
+    });
+    document.querySelectorAll(`.redeemable-label.giftcard`).forEach(elem => {
+        elem.classList.add('active');
+    });
+};
+
 const Redeemable: FunctionComponent<RedeemableProps & WithLanguageProps & FormikProps<RedeemableFormValues>> = ({
     shouldCollapseCouponCode,
     showAppliedRedeemables,
@@ -55,10 +73,13 @@ const Redeemable: FunctionComponent<RedeemableProps & WithLanguageProps & Formik
                 >
                     <TranslatedString id="redeemable.toggle_action" />
                 </a> }
-                { !shouldCollapseCouponCode && <div className="redeemable-label">
-                    <TranslatedString id="redeemable.toggle_action" />
+                { !shouldCollapseCouponCode && <div className="redeemable-label active promo" onClick={ preventDefault(() => togglePromo()) }>
+                    Promo Code
                 </div> }
-                { (isOpen || !shouldCollapseCouponCode) && <div data-test="redeemable-collapsable">
+                { !shouldCollapseCouponCode && <div className="redeemable-label giftcard" onClick={ preventDefault(() => toggleGiftcard()) }>
+                    Gift Card
+                </div> }
+                { (isOpen || !shouldCollapseCouponCode) && <div className="redeemable-collapsable" data-test="redeemable-collapsable">
                     <RedeemableForm { ...formProps } />
                     { showAppliedRedeemables &&
                         <AppliedRedeemables { ...formProps } /> }
@@ -125,7 +146,7 @@ const RedeemableForm: FunctionComponent<Partial<RedeemableProps> & FormikProps<R
                     { renderErrorMessage(appliedRedeemableError.errors[0].code) }
                 </Alert> }
 
-            <div className="form-prefixPostfix">
+            <div className="form-prefixPostfix redeemable-collapsable">
                 <TextInput
                     { ...field }
                     className="form-input optimizedCheckout-form-input"

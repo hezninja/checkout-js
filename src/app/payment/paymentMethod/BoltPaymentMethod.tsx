@@ -1,17 +1,22 @@
-import React, { FunctionComponent } from 'react';
+import React, { useCallback, FunctionComponent } from 'react';
 
-import BoltClientPaymentMethod from './BoltClientPaymentMethod';
-import BoltEmbeddedPaymentMethod from './BoltEmbeddedPaymentMethod';
-import { HostedPaymentMethodProps } from './HostedPaymentMethod';
+import HostedPaymentMethod, { HostedPaymentMethodProps } from './HostedPaymentMethod';
 
-const BoltPaymentMethod: FunctionComponent<HostedPaymentMethodProps> = props => {
-    const useBoltEmbedded = props?.method?.initializationData?.embeddedOneClickEnabled;
+const BoltPaymentMethod: FunctionComponent<HostedPaymentMethodProps> = ({
+    initializePayment,
+    ...rest
+}) => {
+    const initializeBoltPayment = useCallback(options => initializePayment({
+        ...options,
+        bolt: {
+            useBigCommerceCheckout: true,
+        },
+    }), [initializePayment]);
 
-    if (useBoltEmbedded) {
-        return <BoltEmbeddedPaymentMethod { ...props } />;
-    }
-
-    return <BoltClientPaymentMethod { ...props } />;
+    return <HostedPaymentMethod
+        { ...rest }
+        initializePayment={ initializeBoltPayment }
+    />;
 };
 
 export default BoltPaymentMethod;

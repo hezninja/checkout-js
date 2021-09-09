@@ -42,7 +42,7 @@ const PasswordField: FunctionComponent<PasswordFieldProps> = ({
 
         return <a
             data-test="forgot-password-link"
-            href={ forgotPasswordUrl }
+            href="https://www.justsunnies.com.au/password-reset"
             rel="noopener noreferrer"
             target="_blank"
         >

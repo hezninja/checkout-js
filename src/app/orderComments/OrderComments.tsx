@@ -25,7 +25,7 @@ const OrderComments: FunctionComponent = () => {
         </Legend>
     ), []);
 
-    return <Fieldset legend={ legend } testId="checkout-shipping-comments">
+    return <Fieldset legend={ legend } className="checkout-shipping-comments" testId="checkout-shipping-comments">
         <FormField
             input={ renderInput }
             label={ renderLabel }

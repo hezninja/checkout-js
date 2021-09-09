@@ -14,21 +14,25 @@
 .customerEmail-action {
     @include grid-column($collapse: true, $columns: $total-columns);
 
-    margin-bottom: spacing("single");
-    padding: 0;
+    /* margin-bottom: spacing("single"); */
+    margin-bottom: 0;
+    margin-top: 0;
 
     @include breakpoint("small") {
-        margin: $customerEmail-action-margin;
-        padding-left: spacing("single");
+        /* margin: $customerEmail-action-margin; */
+
+        /* padding-left: spacing("single"); */
+        padding-left: 0;
         width: grid-calc(5, $total-columns);
     }
 }
 
 .customerEmail-body {
+    width: 100%;
     @include grid-column($collapse: true, $columns: $total-columns);
 
     @include breakpoint("small") {
-        width: grid-calc(7, $total-columns);
+        /* width: grid-calc(7, $total-columns); */
     }
 }
 

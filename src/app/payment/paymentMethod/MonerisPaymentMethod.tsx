@@ -1,44 +1,29 @@
-import { CardInstrument, PaymentInitializeOptions } from '@bigcommerce/checkout-sdk';
+import { PaymentInitializeOptions } from '@bigcommerce/checkout-sdk';
 import React, { useCallback, FunctionComponent } from 'react';
-
-import { withHostedCreditCardFieldset, WithInjectedHostedCreditCardFieldsetProps } from '../hostedCreditCard';
 
 import HostedWidgetPaymentMethod, { HostedWidgetPaymentMethodProps } from './HostedWidgetPaymentMethod';
 
 export type MonerisPaymentMethodProps = Omit< HostedWidgetPaymentMethodProps, 'containerId'>;
 
-const MonerisPaymentMethod: FunctionComponent<MonerisPaymentMethodProps & WithInjectedHostedCreditCardFieldsetProps> = ({
+const MonerisPaymentMethod: FunctionComponent<MonerisPaymentMethodProps> = ({
     initializePayment,
-    method,
-    getHostedFormOptions,
-    getHostedStoredCardValidationFieldset,
-    hostedStoredCardValidationSchema,
     ...rest
-}) => {
+  }) => {
 
     const containerId = `moneris-iframe-container`;
 
-    const initializeMonerisPayment: HostedWidgetPaymentMethodProps['initializePayment'] = useCallback(async (options: PaymentInitializeOptions, selectedInstrument) => initializePayment({
+    const initializeMonerisPayment = useCallback((options: PaymentInitializeOptions) => initializePayment({
         ...options,
         moneris: {
             containerId,
-            ...(selectedInstrument && { form : await getHostedFormOptions(selectedInstrument) }),
         },
-    }), [containerId, getHostedFormOptions, initializePayment]);
+    }), [containerId, initializePayment]);
 
-    function validateInstrument(_shouldShowNumber: boolean, selectedInstrument: CardInstrument) {
-        return getHostedStoredCardValidationFieldset(selectedInstrument);
-    }
-
-    return (
-        <HostedWidgetPaymentMethod
-            { ...rest }
-            containerId={ containerId }
-            initializePayment={ initializeMonerisPayment }
-            method={ method }
-            storedCardValidationSchema={ hostedStoredCardValidationSchema }
-            validateInstrument={ validateInstrument }
-        />);
+    return <HostedWidgetPaymentMethod
+        { ...rest }
+        containerId={ containerId }
+        initializePayment={ initializeMonerisPayment }
+    />;
 };
 
-export default withHostedCreditCardFieldset(MonerisPaymentMethod);
+export default MonerisPaymentMethod;

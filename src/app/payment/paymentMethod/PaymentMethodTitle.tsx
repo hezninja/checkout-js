@@ -73,10 +73,6 @@ function getPaymentMethodTitle(
                 logoUrl: cdnPath('/img/payment-providers/amazon-header.png'),
                 titleText: '',
             },
-            [PaymentMethodId.Bolt]: {
-                logoUrl: '',
-                titleText: method.initializationData?.embeddedOneClickEnabled ? language.translate('payment.credit_card_text') : methodName,
-            },
             [PaymentMethodId.ChasePay]: {
                 logoUrl: cdnPath('/img/payment-providers/chase-pay.png'),
                 titleText: '',
@@ -188,6 +184,12 @@ const PaymentMethodTitle: FunctionComponent<PaymentMethodTitleProps & WithLangua
             return card.type;
         }
     };
+    const getPaymentMethodExtraText = () => {
+
+        if (methodName === 'bankdeposit') {
+            return 'Custom Bank Deposit Tooltip Here';
+        }
+    };
 
     return (
         <Fragment>
@@ -203,6 +205,7 @@ const PaymentMethodTitle: FunctionComponent<PaymentMethodTitleProps & WithLangua
                 data-test="payment-method-name"
             >
                 { titleText }
+                <span className="payment-method-tooltip">{ getPaymentMethodExtraText() }</span>
             </span> }
 
             <div className="paymentProviderHeader-cc">

@@ -13,6 +13,11 @@ function mapFromDigital(item: DigitalItem): OrderSummaryItemProps {
         amount: item.extendedListPrice,
         amountAfterDiscount: item.extendedSalePrice,
         name: item.name,
+        brand: 'Just Sunnies',
+        categoryNames: (item.categoryNames || []).map(option => ({
+            content: `${option}`,
+            testId: '',
+        })),
         image: getOrderSummaryItemImage(item),
         productOptions: [
             ...(item.options || []).map(option => ({

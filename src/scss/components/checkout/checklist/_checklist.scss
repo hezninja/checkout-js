@@ -3,7 +3,8 @@
 // =============================================================================
 
 .form-checklist {
-    border: container("border", "dark");
+    /* border: container("border", "dark"); */
+    border: none;
     border-radius: $global-radius $global-radius 0 0;
     color: $checklist-label-color;
     list-style: none;
@@ -15,11 +16,65 @@
 }
 
 .form-checklist-item {
-    border-bottom: container("border", "dark");
+    /* border-bottom: container("border", "dark"); */
+    border: 1px solid #d9d9d9;
+    margin-bottom: 10px;
     overflow: hidden;
 
     &:last-child {
-        border-bottom: 0;
+        /* border-bottom: 0; */
+    }
+}
+
+.shipping-first-header {
+    display: none;
+}
+
+.clickAndCollect {
+    border: 1px solid #d9d9d9;
+    cursor: pointer;
+    margin-bottom: 10px;
+    overflow: hidden;
+
+    .collectHeading.active {
+        background: #fafafa;
+        border-bottom: 1px solid #d9d9d9;
+    }
+
+    .collectHeading {
+        color: inherit;
+        display: block;
+        font-size: 1.15385rem;
+        line-height: 2.2;
+        margin-bottom: 0;
+        min-height: 4.61538rem;
+        padding: 2rem 1.5rem;
+        padding-left: 4.5rem;
+        position: relative;
+    }
+
+    .collectOptions.active {
+        display: block;
+    }
+
+    .collectOptions {
+        display: none;
+    }
+
+    ul {
+        list-style: none;
+        margin: 0;
+        margin-bottom: 1rem;
+    }
+
+    li {
+        border: none !important;
+        margin: 0;
+
+        .form-checklist-checkbox ~ .form-label {
+            padding-bottom: 1rem;
+            padding-top: 1rem;
+        }
     }
 }
 
@@ -79,7 +134,7 @@
     }
 
     &::after {
-        transform: scale(0.66);
+        transform: scale(0.4);
     }
 
     &::before {

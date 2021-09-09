@@ -16,6 +16,7 @@ const EmailField: FunctionComponent<EmailFieldProps>  = ({
             { ...props.field }
             autoComplete={ props.field.name }
             id={ props.field.name }
+            placeholder="Email Address"
             type="email"
         />
     ), []);

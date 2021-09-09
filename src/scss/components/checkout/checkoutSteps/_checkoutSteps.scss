@@ -13,12 +13,14 @@
     margin: 0;
 
     @include breakpoint("medium") {
-        padding-right: (spacing("double") + spacing("double"));
+        /* padding-right: (spacing("double") + spacing("double")); */
+        padding-right: 0;
     }
 }
 
 .checkout-step {
-    border-bottom: container("border");
+    /* border-bottom: container("border"); */
+    border: none;
     padding: spacing("single") 0;
 
     &:last-child {
@@ -52,6 +54,22 @@
     }
 }
 
+#checkout-customer-guest.checkout-form {
+    background: #f5f5f5;
+    margin-left: 0;
+    padding: 20px;
+}
+
+#checkout-customer-returning.checkout-form {
+    background: #f5f5f5;
+    margin-left: 0;
+    padding: 20px;
+
+    .form-actions {
+        margin-bottom: 0;
+    }
+}
+
 // Checkout Step Counter
 // -----------------------------------------------------------------------------
 .stepHeader-counter {
@@ -60,6 +78,7 @@
     background-color: color("primary");
     border-radius: 50%;
     text-align: center;
+    transform: scale(0.7);
     transition: transform 250ms ease;
 
     &::before {
@@ -82,7 +101,8 @@
 }
 
 .stepHeader-counter--complete {
-    transform: scale(0.8);
+    background-color: #2fb3e6;
+    transform: scale(0.7);
 
     &::before {
         @include square(0);
@@ -99,17 +119,10 @@
 // Checkout Step Header
 // -----------------------------------------------------------------------------
 .stepHeader {
-    padding: spacing("single") 0;
-
-    &.is-readonly {
-        cursor: default;
-    }
-}
-
-.stepHeader-row {
-    align-items: flex-start;
+    align-items: top;
     display: flex;
     flex-wrap: wrap;
+    padding: spacing("single") 0;
 
     @include breakpoint("small") {
         flex-wrap: nowrap;
@@ -117,6 +130,10 @@
 
     @include breakpoint("large") {
         flex-wrap: nowrap;
+    }
+
+    &.is-readonly {
+        cursor: default;
     }
 }
 
@@ -166,21 +183,5 @@
 
     .button {
         margin-bottom: 0;
-    }
-}
-
-.stepHeader-suggestion {
-    margin: 0;
-
-    @include breakpoint("small") {
-        margin-left: remCalc($checkoutStep-counter-size) + $checkoutStep-header-figure-margin;
-    }
-
-    @include breakpoint("large") {
-        margin-left: 0;
-    }
-
-    @include breakpoint(1080px) {
-        margin-left: remCalc($checkoutStep-counter-size) + $checkoutStep-header-figure-margin;
     }
 }

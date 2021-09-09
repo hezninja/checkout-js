@@ -2,6 +2,7 @@ import { Address, Country, FormField } from '@bigcommerce/checkout-sdk';
 import { memoize } from '@bigcommerce/memoize';
 import { forIn, noop } from 'lodash';
 import React, { createRef, Component, ReactNode, RefObject } from 'react';
+import { preventDefault } from '../common/dom';
 
 import { withLanguage, TranslatedString, WithLanguageProps } from '../locale';
 import { AutocompleteItem } from '../ui/autocomplete';
@@ -62,6 +63,30 @@ const PLACEHOLDER: AddressKeyMap = {
 
 const AUTOCOMPLETE_FIELD_NAME = 'address1';
 
+const hideCompany = () => {
+    document.querySelectorAll(`.company-toggle span`).forEach(elem => {
+        elem.classList.remove('active');
+    });
+    document.querySelectorAll(`.company-toggle span.home`).forEach(elem => {
+        elem.classList.add('active');
+    });
+    document.querySelectorAll(`.dynamic-form-field--company`).forEach(elem => {
+        elem.classList.remove('show');
+    });
+};
+
+const showCompany = () => {
+    document.querySelectorAll(`.company-toggle span`).forEach(elem => {
+        elem.classList.remove('active');
+    });
+    document.querySelectorAll(`.company-toggle span.work`).forEach(elem => {
+        elem.classList.add('active');
+    });
+    document.querySelectorAll(`.dynamic-form-field--company`).forEach(elem => {
+        elem.classList.add('show');
+    });
+};
+
 class AddressForm extends Component<AddressFormProps & WithLanguageProps> {
     private containerRef: RefObject<HTMLElement> = createRef();
     private nextElement?: HTMLElement | null;
@@ -115,20 +140,31 @@ class AddressForm extends Component<AddressFormProps & WithLanguageProps> {
                         }
 
                         return (
-                            <DynamicFormField
-                                autocomplete={ AUTOCOMPLETE[field.name] }
-                                extraClass={ `dynamic-form-field--${getAddressFormFieldLegacyName(addressFieldName)}` }
-                                field={ field }
-                                inputId={ getAddressFormFieldInputId(addressFieldName) }
-                                // stateOrProvince can sometimes be a dropdown or input, so relying on id is not sufficient
-                                key={ `${field.id}-${field.name}` }
-                                label={ field.custom ? field.label : <TranslatedString id={ LABEL[field.name] } /> }
-                                onChange={ this.handleDynamicFormFieldChange(addressFieldName) }
-                                parentFieldName={ field.custom ?
-                                    (fieldName ? `${fieldName}.customFields` : 'customFields') :
-                                    fieldName }
-                                placeholder={ translatedPlaceholderId && language.translate(translatedPlaceholderId) }
-                            />
+                            <>
+                                { getAddressFormFieldLegacyName(addressFieldName) === 'company' &&
+                                <div className="company-toggle">
+                                    <span className="home active" onClick={ preventDefault(() => hideCompany()) }>Home</span>
+                                    <span className="work" onClick={ preventDefault(() => showCompany()) }>Work</span>
+                                </div> }
+                                <DynamicFormField
+                                    autocomplete={ AUTOCOMPLETE[field.name] }
+                                    extraClass={ `dynamic-form-field--${getAddressFormFieldLegacyName(addressFieldName)}` }
+                                    field={ field }
+                                    inputId={ getAddressFormFieldInputId(addressFieldName) }
+                                    // stateOrProvince can sometimes be a dropdown or input, so relying on id is not sufficient
+                                    key={ `${field.id}-${field.name}` }
+                                    label={ field.custom ? field.label : <TranslatedString id={ LABEL[field.name] } /> }
+                                    onChange={ this.handleDynamicFormFieldChange(addressFieldName) }
+                                    parentFieldName={ field.custom ?
+                                        (fieldName ? `${fieldName}.customFields` : 'customFields') :
+                                        fieldName }
+                                    placeholder={ field.label ? field.label : translatedPlaceholderId && language.translate(translatedPlaceholderId) }
+                                />
+                                { getAddressFormFieldLegacyName(addressFieldName) === 'phone' &&
+                                    <div className="form-legend-container deliveryAddressLabel">
+                                        <legend className="form-legend optimizedCheckout-headingSecondary">Delivery Address </legend>
+                                    </div> }
+                            </>
                         );
                     }) }
                 </div>

@@ -111,14 +111,18 @@ class OrderConfirmation extends Component<
             },
         } = config;
 
+        console.log('order details');
+        console.log(order);
+
         return (
             <div className={ classNames(
                 'layout optimizedCheckout-contentPrimary',
                 { 'is-embedded': isEmbedded() }
             ) }
             >
+                <script dangerouslySetInnerHTML={ {__html: `console.log('return set')`} } />
                 <div className="layout-main">
-                    <div className="orderConfirmation">
+                    <div className="orderConfirmation convert-here">
                         <ThankYouHeader name={ order.billingAddress.firstName } />
 
                         <OrderStatus

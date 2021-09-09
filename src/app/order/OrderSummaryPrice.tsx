@@ -8,6 +8,7 @@ import { ShopperCurrency } from '../currency';
 export interface OrderSummaryPriceProps {
     label: ReactNode;
     amount?: number | null;
+    orderTotal: number | null;
     zeroLabel?: ReactNode;
     className?: string;
     testId?: string;

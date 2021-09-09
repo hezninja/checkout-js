@@ -25,10 +25,6 @@ const PaypalCommercePaymentMethod: FunctionComponent<PaypalCommercePaymentMethod
     const paymentContext = useContext(PaymentContext);
     const { setSubmitted } = useContext(FormContext);
     const paymentUniqueId = `${uniqueId}-paymentWidget`;
-    const paymentMethodsWithoutWidget = ['venmo'];
-    const { method: { id } } = rest;
-
-    const shouldShowWidget = isAPM && !paymentMethodsWithoutWidget.includes(id);
 
     const initializePayPalCommercePayment = useCallback(options => initializePayment({
         ...options,
@@ -96,7 +92,7 @@ const PaypalCommercePaymentMethod: FunctionComponent<PaypalCommercePaymentMethod
         containerId={ paymentUniqueId }
         initializePayment={ initializePayPalCommercePayment }
         onUnhandledError={ onError }
-        shouldShow={ shouldShowWidget }
+        shouldShow={ isAPM }
     />;
 };
 

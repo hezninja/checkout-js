@@ -3,8 +3,10 @@
 // =============================================================================
 
 .checkoutHeader {
-    background-color: container("fill", "dark");
+    /* background-color: container("fill", "dark"); */
+    background-color: #2db4e6;
     border-bottom: container("border");
+    color: #fff;
     text-align: center;
 
     @include breakpoint("small") {

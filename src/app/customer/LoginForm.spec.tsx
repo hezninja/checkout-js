@@ -1,40 +1,29 @@
 import { mount, render } from 'enzyme';
-import React, { FunctionComponent } from 'react';
+import { noop } from 'lodash';
+import React from 'react';
 
 import { getStoreConfig } from '../config/config.mock';
 import { createLocaleContext, LocaleContext, LocaleContextType, TranslatedHtml, TranslatedLink } from '../locale';
 import { Alert } from '../ui/alert';
 
 import CustomerViewType from './CustomerViewType';
-import LoginForm, { LoginFormProps } from './LoginForm';
+import LoginForm from './LoginForm';
 
 describe('LoginForm', () => {
-    let defaultProps: LoginFormProps;
     let localeContext: LocaleContextType;
-    let TestComponent: FunctionComponent<Partial<LoginFormProps>>;
 
     beforeEach(() => {
-        defaultProps = {
-            continueAsGuestButtonLabelId: 'customer.continue_as_guest_action',
-            forgotPasswordUrl: '/forgot-password',
-            onSignIn: jest.fn(),
-        };
-
         localeContext = createLocaleContext(getStoreConfig());
-
-        TestComponent = props => (
-            <LocaleContext.Provider value={ localeContext }>
-                <LoginForm
-                    { ...defaultProps }
-                    { ...props }
-                />
-            </LocaleContext.Provider>
-        );
     });
 
     it('matches snapshot', () => {
         const component = render(
-            <TestComponent />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ noop }
+                />
+            </LocaleContext.Provider>
         );
 
         expect(component)
@@ -43,7 +32,13 @@ describe('LoginForm', () => {
 
     it('renders form with initial values', () => {
         const component = mount(
-            <TestComponent email={ 'test@bigcommerce.com' } />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    email={ 'test@bigcommerce.com' }
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ noop }
+                />
+            </LocaleContext.Provider>
         );
 
         expect(component.find('input[name="email"]').prop('value'))
@@ -53,7 +48,12 @@ describe('LoginForm', () => {
     it('notifies when user clicks on "sign in" button', async () => {
         const handleSignIn = jest.fn();
         const component = mount(
-            <TestComponent onSignIn={ handleSignIn } />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ handleSignIn }
+                />
+            </LocaleContext.Provider>
         );
 
         component.find('input[name="email"]')
@@ -74,11 +74,16 @@ describe('LoginForm', () => {
     it('displays error message if email is not valid', () => {
         async function getEmailError(value: string): Promise<string> {
             const component = mount(
-                <TestComponent />
+                <LocaleContext.Provider value={ localeContext }>
+                    <LoginForm
+                        forgotPasswordUrl={ '/forgot-password' }
+                        onSignIn={ noop }
+                    />
+                </LocaleContext.Provider>
             );
 
             component.find('input[name="email"]')
-                .simulate('change', { target: { value, name: 'email' } });
+            .simulate('change', { target: { value, name: 'email' } });
 
             component.find('form')
                 .simulate('submit');
@@ -104,7 +109,12 @@ describe('LoginForm', () => {
 
     it('displays error message if password is missing', async () => {
         const component = mount(
-            <TestComponent />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ noop }
+                />
+            </LocaleContext.Provider>
         );
 
         component.find('input[name="email"]')
@@ -124,12 +134,16 @@ describe('LoginForm', () => {
     it('renders SuggestedLogin (no email input, suggestion, continue as guest) and ignores canCancel flag', () => {
         const onCancel = jest.fn();
         const component = mount(
-            <TestComponent
-                canCancel
-                email="foo@bar.com"
-                onCancel={ onCancel }
-                viewType={ CustomerViewType.SuggestedLogin }
-            />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    canCancel
+                    email="foo@bar.com"
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onCancel={ onCancel }
+                    onSignIn={ noop }
+                    viewType={ CustomerViewType.SuggestedLogin }
+                />
+            </LocaleContext.Provider>
         );
 
         expect(component.find(Alert).prop('type'))
@@ -156,11 +170,15 @@ describe('LoginForm', () => {
 
     it('renders info alert if CancellableEnforcedLogin, and hides email input', () => {
         const component = mount(
-            <TestComponent
-                canCancel
-                email="foo@bar.com"
-                viewType={ CustomerViewType.CancellableEnforcedLogin }
-            />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    canCancel
+                    email="foo@bar.com"
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ noop }
+                    viewType={ CustomerViewType.CancellableEnforcedLogin }
+                />
+            </LocaleContext.Provider>
         );
 
         expect(component.find(Alert).prop('type'))
@@ -178,11 +196,15 @@ describe('LoginForm', () => {
 
     it('renders guest is temporary disabled alert if EnforcedLogin, and ignores canCancel flag', () => {
         const component = mount(
-            <TestComponent
-                canCancel
-                email="foo@bar.com"
-                viewType={ CustomerViewType.EnforcedLogin }
-            />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    canCancel
+                    email="foo@bar.com"
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ noop }
+                    viewType={ CustomerViewType.EnforcedLogin }
+                />
+            </LocaleContext.Provider>
         );
 
         expect(component.find(Alert).prop('type'))
@@ -201,10 +223,14 @@ describe('LoginForm', () => {
     it('renders error as alert if password is incorrect', () => {
         const error = Object.assign(new Error(), { body: { type: 'invalid login' } });
         const component = mount(
-            <TestComponent
-                canCancel
-                signInError={ error }
-            />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    canCancel
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ noop }
+                    signInError={ error }
+                />
+            </LocaleContext.Provider>
         );
 
         expect(component.find('[data-test="customer-login-error-message"]').text())
@@ -213,7 +239,13 @@ describe('LoginForm', () => {
 
     it('renders cancel button if able to cancel', () => {
         const component = mount(
-            <TestComponent canCancel />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    canCancel
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ noop }
+                />
+            </LocaleContext.Provider>
         );
 
         expect(component.exists('[data-test="customer-cancel-button"]'))
@@ -222,7 +254,12 @@ describe('LoginForm', () => {
 
     it('does not render cancel button by default', () => {
         const component = mount(
-            <TestComponent />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onSignIn={ noop }
+                />
+            </LocaleContext.Provider>
         );
 
         expect(component.exists('[data-test="customer-cancel-button"]'))
@@ -232,7 +269,13 @@ describe('LoginForm', () => {
     it('notifies when user changes email address', () => {
         const handleChangeEmail = jest.fn();
         const component = mount(
-            <TestComponent onChangeEmail={ handleChangeEmail } />
+            <LocaleContext.Provider value={ localeContext }>
+                <LoginForm
+                    forgotPasswordUrl={ '/forgot-password' }
+                    onChangeEmail={ handleChangeEmail }
+                    onSignIn={ noop }
+                />
+            </LocaleContext.Provider>
         );
 
         component.find('input[name="email"]')
@@ -240,16 +283,5 @@ describe('LoginForm', () => {
 
         expect(handleChangeEmail)
             .toHaveBeenCalledWith('test@bigcommerce.com');
-    });
-
-    it('shows different "Continue as guest" button label if another label id was provided', () => {
-        const component = mount(
-            <TestComponent
-                continueAsGuestButtonLabelId="customer.continue"
-                viewType={ CustomerViewType.SuggestedLogin }
-            />
-        );
-
-        expect(component.find('[data-test="customer-guest-continue"]').text()).not.toEqual('Continue as guest');
     });
 });

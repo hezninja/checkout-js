@@ -20,18 +20,16 @@ describe('when using Digital River payment', () => {
     let defaultProps: PaymentMethodProps;
     let localeContext: LocaleContextType;
     let PaymentMethodTest: FunctionComponent<PaymentMethodProps>;
-    const digitalRiverMethod = getPaymentMethod();
-    digitalRiverMethod.config.isVaultingEnabled = true;
 
     beforeEach(() => {
         defaultProps = {
-            method: digitalRiverMethod,
+            method: getPaymentMethod(),
             onUnhandledError: jest.fn(),
         };
         checkoutService = createCheckoutService();
         checkoutState = checkoutService.getState();
         localeContext = createLocaleContext(getStoreConfig());
-        method = { ...digitalRiverMethod, id: PaymentMethodId.DigitalRiver };
+        method = { ...getPaymentMethod(), id: PaymentMethodId.DigitalRiver };
 
         jest.spyOn(checkoutState.data, 'getConfig')
             .mockReturnValue(getStoreConfig());
@@ -69,7 +67,17 @@ describe('when using Digital River payment', () => {
     });
 
     it('initializes method with required config including initializationData', () => {
-        const container = mount(<PaymentMethodTest { ...defaultProps } method={ method } />);
+        const methodWithInitializationData = {
+            ...method,
+            initializationData: {
+                disabledPaymentMethods: [
+                    'googlePay',
+                    'alipay',
+                ],
+            },
+        };
+
+        const container = mount(<PaymentMethodTest { ...defaultProps } method={ methodWithInitializationData } />);
         const component: ReactWrapper<HostedDropInPaymentMethodProps> = container.find(HostedDropInPaymentMethod);
 
         component.prop('initializePayment')({
@@ -86,12 +94,16 @@ describe('when using Digital River payment', () => {
                         },
                         flow: 'checkout',
                         paymentMethodConfiguration: {
+                            disabledPaymentMethods: [
+                                'googlePay',
+                                'alipay',
+                            ],
                             classes: {
                                 base: 'form-input optimizedCheckout-form-input',
                             },
                         },
-                        showComplianceSection: false,
-                        showSavePaymentAgreement: true,
+                        showComplianceSection: true,
+                        showSavePaymentAgreement: false,
                         showTermsOfSaleDisclosure: true,
                         usage: 'unscheduled',
                     },
@@ -122,12 +134,13 @@ describe('when using Digital River payment', () => {
                         },
                         flow: 'checkout',
                         paymentMethodConfiguration: {
+                            disabledPaymentMethods: [],
                             classes: {
                                 base: 'form-input optimizedCheckout-form-input',
                             },
                         },
-                        showComplianceSection: false,
-                        showSavePaymentAgreement: true,
+                        showComplianceSection: true,
+                        showSavePaymentAgreement: false,
                         showTermsOfSaleDisclosure: true,
                         usage: 'unscheduled',
                     },

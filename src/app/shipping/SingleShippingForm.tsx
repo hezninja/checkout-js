@@ -17,7 +17,6 @@ import ShippingFormFooter from './ShippingFormFooter';
 
 export interface SingleShippingFormProps {
     addresses: CustomerAddress[];
-    isBillingSameAsShipping: boolean;
     cartHasChanged: boolean;
     consignments: Consignment[];
     countries: Country[];
@@ -289,8 +288,8 @@ export default withLanguage(withFormik<SingleShippingFormProps & WithLanguagePro
     handleSubmit: (values, { props: { onSubmit } }) => {
         onSubmit(values);
     },
-    mapPropsToValues: ({ getFields, shippingAddress, isBillingSameAsShipping, customerMessage }) => ({
-        billingSameAsShipping: isBillingSameAsShipping,
+    mapPropsToValues: ({ getFields, shippingAddress,  customerMessage }) => ({
+        billingSameAsShipping: true,
         orderComment: customerMessage,
         shippingAddress: mapAddressToFormValues(
             getFields(shippingAddress && shippingAddress.countryCode),

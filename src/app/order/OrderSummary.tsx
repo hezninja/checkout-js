@@ -30,6 +30,8 @@ const OrderSummary: FunctionComponent<OrderSummaryProps & OrderSummarySubtotalsP
         removeBundledItems(lineItems)
     ), [lineItems]);
 
+    console.log(lineItems);
+
     return <article className="cart optimizedCheckout-orderSummary" data-test="cart">
         <OrderSummaryHeader>
             { headerLink }

@@ -20,7 +20,7 @@ const providersWithCustomClasses = [PaymentMethodId.Bolt];
 
 const PaymentSubmitButtonText: FunctionComponent<PaymentSubmitButtonTextProps> = memo(({ methodId, methodName, methodType, methodGateway, isPpsdkEnabled = false, initialisationStrategyType }) => {
 
-    if (isPpsdkEnabled && methodName && initialisationStrategyType === 'none') {
+    if (isPpsdkEnabled && methodName && initialisationStrategyType === 'NONE') {
         return <TranslatedString data={ { methodName } } id="payment.ppsdk_continue_action" />;
     }
 
@@ -65,14 +65,6 @@ const PaymentSubmitButtonText: FunctionComponent<PaymentSubmitButtonTextProps> =
 
     if (methodId === PaymentMethodId.Quadpay) {
         return <TranslatedString id="payment.quadpay_continue_action" />;
-    }
-
-    if (methodId === PaymentMethodId.Zip) {
-        return <TranslatedString id="payment.zip_continue_action" />;
-    }
-
-    if (methodId === PaymentMethodId.Klarna) {
-        return <TranslatedString id="payment.klarna_continue_action" />;
     }
 
     return <TranslatedString id="payment.place_order_action" />;

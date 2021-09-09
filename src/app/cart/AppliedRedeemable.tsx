@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import React, { FunctionComponent } from 'react';
 
 import { TranslatedString } from '../locale';
-import { IconRemove } from '../ui/icon';
 
 import './AppliedRedeemable.scss';
 
@@ -37,7 +36,7 @@ const AppliedRedeemable: FunctionComponent<AppliedRedeemableProps> = ({
                         onClick={ onRemove }
                         type="button"
                     >
-                        <IconRemove />
+                        Remove
                     </button>
                 </div>
             </div>

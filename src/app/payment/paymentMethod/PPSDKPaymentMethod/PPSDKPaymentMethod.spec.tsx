@@ -5,7 +5,7 @@ import React from 'react';
 import { PPSDKPaymentMethod } from './PPSDKPaymentMethod';
 
 describe('when using a PPSDK payment method', () => {
-    describe('with an initialisation type of "none"', () => {
+    describe('with an initialisation type of NONE', () => {
         const method: PaymentMethod = {
             id: 'someId',
             gateway: 'someGateway',
@@ -14,7 +14,7 @@ describe('when using a PPSDK payment method', () => {
             supportedCards: [],
             type: 'PAYMENT_TYPE_SDK',
             initializationStrategy: {
-                type: 'none',
+                type: 'NONE',
             },
         };
 

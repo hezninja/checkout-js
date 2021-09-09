@@ -17,7 +17,6 @@ import ShippingHeader from './ShippingHeader';
 import { SingleShippingFormValues } from './SingleShippingForm';
 
 export interface ShippingProps {
-    isBillingSameAsShipping: boolean;
     cartHasChanged: boolean;
     isMultiShippingMode: boolean;
     onCreateAccount(): void;
@@ -25,7 +24,7 @@ export interface ShippingProps {
     onReady?(): void;
     onUnhandledError(error: Error): void;
     onSignIn(): void;
-    navigateNextStep(isBillingSameAsShipping: boolean): void;
+    navigateNextStep(billingSameAsShipping: boolean): void;
 }
 
 export interface WithCheckoutShippingProps {
@@ -98,7 +97,6 @@ class Shipping extends Component<ShippingProps & WithCheckoutShippingProps, Ship
 
     render(): ReactNode {
         const {
-            isBillingSameAsShipping,
             isGuest,
             shouldShowMultiShipping,
             customer,
@@ -133,7 +131,6 @@ class Shipping extends Component<ShippingProps & WithCheckoutShippingProps, Ship
                         addresses={ customer.addresses }
                         deinitialize={ deinitializeShippingMethod }
                         initialize={ initializeShippingMethod }
-                        isBillingSameAsShipping = { isBillingSameAsShipping }
                         isGuest={ isGuest }
                         isMultiShippingMode={ isMultiShippingMode }
                         onMultiShippingSubmit={ this.handleMultiShippingSubmit }

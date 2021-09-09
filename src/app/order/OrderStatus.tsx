@@ -85,7 +85,7 @@ const OrderStatusMessage: FunctionComponent<OrderStatusMessageProps> = ({
     switch (orderStatus) {
     case 'MANUAL_VERIFICATION_REQUIRED':
     case 'AWAITING_PAYMENT':
-        return <TranslatedHtml
+        return <TranslatedString
             id="order_confirmation.order_pending_review_text"
         />;
 

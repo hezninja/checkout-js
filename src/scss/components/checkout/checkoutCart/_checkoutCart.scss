@@ -3,9 +3,13 @@
 // =============================================================================
 
 .cart {
-    border: container("border");
+    border: none;
+
+    /* border: container("border"); */
     border-radius: $checkoutCart-borderRadius;
-    box-shadow: container("dropShadow");
+    box-shadow: none;
+
+    /* box-shadow: container("dropShadow"); */
     display: none;
     margin: spacing("double") 0 spacing("single");
     min-height: $checkoutCart-minHeight;

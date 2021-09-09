@@ -11,6 +11,8 @@ function mapFromGiftCertificate(item: GiftCertificateItem): OrderSummaryItemProp
         quantity: 1,
         amount: item.amount,
         name: item.name,
+        brand: 'Just Sunnies',
+        categoryNames: [],
         image:
             <span
                 className="productImage-giftCertificate"

@@ -1,21 +1,23 @@
 import { FormField } from '@bigcommerce/checkout-sdk';
-import { withFormik, FormikProps } from 'formik';
+import { withFormik, FormikProps, FieldProps } from 'formik';
 import { noop } from 'lodash';
-import React, { useMemo, FunctionComponent } from 'react';
+import React, { useMemo, FunctionComponent, useCallback } from 'react';
 
 import { preventDefault } from '../common/dom';
 import { isRequestError } from '../common/error';
 import { withLanguage, TranslatedString, WithLanguageProps } from '../locale';
 import { Alert, AlertType } from '../ui/alert';
 import { Button, ButtonVariant } from '../ui/button';
-import { DynamicFormField, Fieldset, Form } from '../ui/form';
+import { BasicFormField, DynamicFormField, Fieldset, Form } from '../ui/form';
 
 import getCreateCustomerValidationSchema, { CreateAccountFormValues } from './getCreateCustomerValidationSchema';
 import getPasswordRequirements from './getPasswordRequirements';
 import './CreateAccountForm.scss';
+import SubscribeField from './SubscribeField';
 
 export interface CreateAccountFormProps {
     formFields: FormField[];
+    canSubscribe: boolean;
     createAccountError?: Error;
     isCreatingAccount?: boolean;
     requiresMarketingConsent: boolean;
@@ -25,8 +27,10 @@ export interface CreateAccountFormProps {
 
 const CreateAccountForm: FunctionComponent<CreateAccountFormProps & WithLanguageProps & FormikProps<CreateAccountFormValues>> = ({
     formFields,
+    canSubscribe,
     createAccountError,
     isCreatingAccount,
+    requiresMarketingConsent,
     onCancel,
 }) => {
     const createAccountErrorMessage = useMemo(() => {
@@ -50,6 +54,15 @@ const CreateAccountForm: FunctionComponent<CreateAccountFormProps & WithLanguage
         return createAccountError.message;
     }, [createAccountError]);
 
+    const renderField = useCallback((fieldProps: FieldProps<boolean>) => (
+        <SubscribeField
+            { ...fieldProps }
+            requiresMarketingConsent={ requiresMarketingConsent }
+        />
+    ), [
+        requiresMarketingConsent,
+    ]);
+
     return (<>
         <Form
             className="checkout-form"
@@ -72,6 +85,10 @@ const CreateAccountForm: FunctionComponent<CreateAccountFormProps & WithLanguage
                             parentFieldName={ field.custom ? 'customFields'  : undefined }
                         />
                     )) }
+                    { (canSubscribe || requiresMarketingConsent) && <BasicFormField
+                        name="shouldSubscribe"
+                        render={ renderField }
+                    /> }
                 </div>
             </Fieldset>
 
@@ -104,13 +121,13 @@ export default withLanguage(withFormik<CreateAccountFormProps & WithLanguageProp
     handleSubmit: (values, { props: { onSubmit = noop } }) => {
         onSubmit(values);
     },
-    mapPropsToValues: ({requiresMarketingConsent}) => ({
+    mapPropsToValues: () => ({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
         customFields: {},
-        acceptsMarketingEmails: requiresMarketingConsent ? [] : ['0'],
+        acceptsMarketingEmails: [],
     }),
     validationSchema: ({
         language,
